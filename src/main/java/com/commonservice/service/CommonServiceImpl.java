@@ -3,6 +3,7 @@ package com.commonservice.service;
 import com.commonservice.dto.CardRequestDto;
 import com.commonservice.entity.Merchant;
 import com.commonservice.entity.Terminal;
+import com.commonservice.entity.Van;
 import com.commonservice.message.ApiResponseMessage;
 import com.commonservice.message.ApiResult;
 import com.commonservice.repository.TerminalRepository;
@@ -57,9 +58,16 @@ public class CommonServiceImpl implements CommonService{
                     .build());
         }
 
+        // 공통 정보 응답
+        Van van = terminal.get().getVan();
+
         return ResponseEntity.status(HttpStatus.OK).body(ApiResult.builder()
                 .message(ApiResponseMessage.STEADY_STATE.message())
                 .code(ApiResponseMessage.STEADY_STATE.code())
+                .terminalId(terminal.get().getTerminalId())
+                .van(van.getVan())
+                .vanId(van.getVanId())
+                .vanKey(van.getVanKey())
                 .build());
     }
 
