@@ -25,6 +25,8 @@ public class CommonServiceImpl implements CommonService{
     @Override
     public ResponseEntity<ApiResult> verifyCard(String terminalKey, Long amount) {
 
+        log.info("옴?");
+
         // HTTP Header Authorization 셋팅된 터미널 키로 가맹점 검증
         Optional<Terminal> terminal = terminalRepository.findByTerminalKey(terminalKey);
 

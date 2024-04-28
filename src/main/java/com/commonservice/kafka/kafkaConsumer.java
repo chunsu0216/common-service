@@ -1,13 +1,10 @@
 package com.commonservice.kafka;
 
-import com.commonservice.dto.ApproveDto;
 import com.commonservice.dto.Payload;
 import com.commonservice.entity.Payment;
 import com.commonservice.entity.Terminal;
 import com.commonservice.repository.PaymentRepository;
 import com.commonservice.repository.TerminalRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -60,5 +57,21 @@ public class kafkaConsumer {
                 .build();
 
         paymentRepository.save(payment);
+    }
+
+    /**
+     * kafka topic consumer
+     * 승인 취소
+     */
+    @SneakyThrows
+    @Transactional
+    @KafkaListener(topics = "cancel_result")
+    public void updatePaymentByCard(String kafkaMessage){
+
+        Payload payload = objectMapper.readValue(kafkaMessage, Payload.class);
+        log.info("payload : {}", payload);
+
+        Payment payment = paymentRepository.findPaymentByTransactionId(payload.getTransactionId());
+        payment.decreaseAmount(Long.valueOf(payload.getAmount()));
     }
 }

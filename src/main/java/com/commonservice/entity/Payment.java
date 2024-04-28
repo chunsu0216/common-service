@@ -31,6 +31,11 @@ public class Payment {
     private String vanResultMessage;
     private LocalDateTime tradeDateTime;
 
+    public void decreaseAmount(Long cancelAmount){
+        if(this.amount - cancelAmount < 0) throw new IllegalArgumentException("0원 이하로 UPDATE");
+        this.amount -= cancelAmount;
+    }
+
     public Payment() {
 
     }
